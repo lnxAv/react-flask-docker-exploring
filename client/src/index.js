@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MessageContainer } from './MessageContainer/component';
 import './index.css'
+import 'bootstrap/dist/css/bootstrap.css'
 
 class App extends React.Component {
   constructor(props) {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Panel } from '../Panel/component';
 import { AxiosConfig, ErrorObject } from '../utils';
+import axios from 'axios'
 
 export function MessageContainer() {
   const [curr_latest, setCurrLatest] = useState(undefined);
