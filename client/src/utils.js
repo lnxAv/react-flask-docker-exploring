@@ -1,8 +1,14 @@
 //Configurations for Axios
+const __APIURL = 'http://localhost:5000'
 export const AxiosConfig = (url = '/', data={}, method='post' )=>{
+    const _url = __APIURL + url
     return {
         method,
-        url,
+        headers: {
+            "Content-Type": "application/json",
+            'Access-Control-Allow-Origin': '*',
+        },
+        url: _url,
         data,
       }
 }
