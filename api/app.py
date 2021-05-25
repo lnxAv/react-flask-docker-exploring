@@ -14,7 +14,7 @@ config = {
 
 #! utils
 def convertToJson(_value):
-    return json.dumps(_value, indent=4, sort_keys=True, separators=(',', ': '), default=str)
+    return json.dumps(_value, indent=4, sort_keys=True, default=str)
 
 #! Database
 # get ==

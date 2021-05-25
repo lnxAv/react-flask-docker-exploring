@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { MessageContainer } from './MessageContainer/component';
+
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -13,7 +15,7 @@ class App extends React.Component {
     };
   }
   componentDidMount() {
-    axios({
+    /*axios({
       method: 'post',
       url: "http://localhost:5000/api/v1.0/get_message_info",
       data: {
@@ -34,30 +36,20 @@ class App extends React.Component {
           error,
         });
       }
-    )
+    )*/
   }
 
   render() {
-    const {error, isLoaded, items} = this.state;
-    if (error) {
-      console.log(error)
-      return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
-      return <div>Loading...</div>;
-    } else {
-      return (
-        <p>
-          {items}
-        </p>
-      );
-    }
+    return (
+      <>
+        <MessageContainer />
+      </>
+    )
   }
 }
 
 
 ReactDOM.render(
-  <App>
-    
-  </App>,
+  <App />,
   document.getElementById('root')
 );
