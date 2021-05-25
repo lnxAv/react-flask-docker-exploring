@@ -19,9 +19,7 @@ export function MessageContainer() {
         callback(result)
       },
       (error) => {
-        this.setState({
-          errorObject: ErrorObject('warning', error),
-        });
+        setErrorObject(ErrorObject('warning', error))
       }
     )
   }
