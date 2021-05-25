@@ -11,23 +11,36 @@ export function MessageContainer() {
   const [comment, setComment] = useState('');
   const [errorObject, setErrorObject]= useState()
 
-  //Will and must handle every request 
-  function __RequestHandler(axiosConfig = AxiosConfig(), callback = ()=>{}){
+  //! Api handler
+  function __RequestHandler(axiosConfig = AxiosConfig(), action='', callback = ()=>{}){
     axios(axiosConfig)
-    .then(res => res.json())
     .then(
       (result) => {
+        console.log('result')
+        console.log(result)
+        checkRequestAction(action)
         callback(result)
       },
       (error) => {
+        console.log(error)
         setErrorObject(ErrorObject('warning', error))
       }
     )
   }
+  function checkRequestAction(action) {
+    switch(action){
+      case '':
+        break;
+      case '':
+        break;
+      default:
+    }
+  }
+  // ==
 
   return (
     <div>
-        <Panel />
+        <Panel requestHandler={__RequestHandler} />
     </div>
   );
 }
