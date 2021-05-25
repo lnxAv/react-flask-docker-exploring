@@ -1,28 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { AxiosConfig, ErrorObject } from '../utils';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 
-export function Panel() {
+export function Panel(props) {
   useEffect(() => {
     // Update the document title using the browser API
     return () =>{
     }
   }, [props]);
-  //Will and must handle every request 
-  function __RequestHandler(axiosConfig = AxiosConfig(), callback = ()=>{}){
-    axios(axiosConfig)
-    .then(res => res.json())
-    .then(
-      (result) => {
-        callback(result)
-      },
-      (error) => {
-        this.setState({
-          errorObject=ErrorObject('warning', error),
-        });
-      }
-    )
-  }
+
   return (
     <div>
         <Form>
