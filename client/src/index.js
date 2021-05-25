@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MessageContainer } from './MessageContainer/component';
 import './index.css'
-import 'bootstrap/dist/css/bootstrap.css';
 
 class App extends React.Component {
   constructor(props) {
@@ -14,28 +13,6 @@ class App extends React.Component {
     };
   }
   componentDidMount() {
-    /*axios({
-      method: 'post',
-      url: "http://localhost:5000/api/v1.0/get_message_info",
-      data: {
-        message_id: ''
-      }
-    })
-    .then(res => res.json())
-    .then(
-      (result) => {
-        this.setState({
-          isLoaded: true,
-          items: result,
-        });
-      },
-      (error) => {
-        this.setState({
-          isLoaded: true,
-          error,
-        });
-      }
-    )*/
   }
 
   render() {

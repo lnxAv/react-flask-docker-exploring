@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { AxiosConfig } from '../utils';
+import { Panel } from '../Panel/component';
+import { AxiosConfig, ErrorObject } from '../utils';
 
 export function MessageContainer() {
   const [curr_latest, setCurrLatest] = useState(undefined);
@@ -11,12 +12,23 @@ export function MessageContainer() {
 
   //Will and must handle every request 
   function __RequestHandler(axiosConfig = AxiosConfig(), callback = ()=>{}){
-
+    axios(axiosConfig)
+    .then(res => res.json())
+    .then(
+      (result) => {
+        callback(result)
+      },
+      (error) => {
+        this.setState({
+          errorObject: ErrorObject('warning', error),
+        });
+      }
+    )
   }
 
   return (
     <div>
-        test
+        <Panel />
     </div>
   );
 }
