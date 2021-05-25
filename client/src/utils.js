@@ -20,3 +20,11 @@ export const ErrorObject = (errorType='false', message='') => {
         message
     }
 }
+//ChunkLoads
+export const ChunkLoads = (top=[], view=[], bottom=[]) => {
+    return{
+        top,
+        view,
+        bottom
+    }
+}

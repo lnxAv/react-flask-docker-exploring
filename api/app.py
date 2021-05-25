@@ -27,17 +27,61 @@ def convertToJson(_value):
 
 #! Database
 # get ==
-def get_messageInfo():
-    connection = mysql.connector.connect(**config)
-    cursor = connection.cursor(dictionary=True)
-    cursor.execute('SELECT * FROM message_info')
-    results = cursor.fetchall()
-    cursor.close()
-    connection.close()
-    return convertToJson(results)
+def get_from_init(limit):
+    try:
+        if not limit:
+            raise Exception("No limit")
 
+        connection = mysql.connector.connect(**config)
+        cursor = connection.cursor(dictionary=True)
+
+        sql1 = "SELECT * FROM message_info LIMIT %s OFFSET 0"
+        data1 = (limit,)
+        cursor.execute(sql1, data1)
+
+        results = cursor.fetchall()
+        sample_response = { 
+            "result" : 'success',
+            "value": convertToJson(results)
+        }
+
+        cursor.close()
+        connection.close()
+    except Exception as e:
+        sample_response = {
+            "result": 'failed',
+            "error": str(e)
+        }
+    return sample_response
+
+def get_from_top(curr_deep_first):
+    try:
+        if not curr_deep_first:
+            curr_deep_first=''
+
+        connection = mysql.connector.connect(**config)
+        cursor = connection.cursor(dictionary=True)
+
+        sql1 = "SELECT message_info_id FROM message_info WHERE message_info_id < %s"
+        data1 = (curr_deep_first,)
+        cursor.execute(sql1, data1)
+
+        results = cursor.fetchall()
+        sample_response = { 
+            "result" : 'success',
+            "value": convertToJson(results)
+        }
+
+        cursor.close()
+        connection.close()
+    except Exception as e:
+        sample_response = {
+            "result": 'failed',
+            "error": str(e)
+        }
+    return sample_response
 # set ==
-def insert_messageInfo( email, name, comment):
+def insert_message_info( email, name, comment):
     try:
         if not email or not re.search(regex_email, email) or len(email) > 128:
             raise Exception("Email failed")
@@ -76,10 +120,28 @@ def insert_messageInfo( email, name, comment):
         }
     return sample_response
 #! Routes
-@app.route('/api/v1.0/get_message_info')
-def get_message_info():
-    sample_response = get_messageInfo()
+@app.route('/api/v1.0/get_from_init', methods=['GET', 'POST', 'PUT'])
+def get_from_init_route():
+    if request.method=='POST':
+        input = request.json
+        _limit =  input['limit']
+        sample_response = get_from_init(_limit)
+    else:
+        sample_response = {"result": 'failed'}
+    # JSONify response
+    response = make_response(jsonify(sample_response))
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Content-Type'] = 'application/json'
+    return response
 
+@app.route('/api/v1.0/get_from_top', methods=['GET', 'POST', 'PUT'])
+def get_from_top_route():
+    if request.method=='POST':
+        input = request.json
+        _currDeepFirst =  input['curr_deep_First']
+        sample_response = get_from_top(_currDeepFirst)
+    else:
+        sample_response = {"result": 'failed'}
     # JSONify response
     response = make_response(jsonify(sample_response))
     response.headers['Access-Control-Allow-Origin'] = '*'
@@ -87,13 +149,13 @@ def get_message_info():
     return response
 
 @app.route('/api/v1.0/insert_message_info', methods=['GET', 'POST', 'PUT'])
-def insert_message_info():
+def insert_message_info_route():
     if request.method=='POST':
         input = request.json
         _email =  input['email']
         _name =  input['name']
         _comment =  input['comment']
-        sample_response = insert_messageInfo(_email, _name, _comment)
+        sample_response = insert_message_info(_email, _name, _comment)
     else:
         sample_response = {"result": 'failed'}
     # JSONify response
@@ -103,7 +165,7 @@ def insert_message_info():
     return response
 
 @app.route('/api/v1.0/test', methods=['GET'])
-def test_response():
+def test_response_route():
     """Return a sample JSON response."""
     sample_response = {
         "items": [

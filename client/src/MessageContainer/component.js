@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Panel } from '../Panel/component';
 import { AxiosConfig, ErrorObject } from '../utils';
 import axios from 'axios'
+import { MessageInfoItem } from '../MessageInfoItem/component';
+import { MessageLoadBalencer } from '../MessageLoadBalencer/component';
 
-export function MessageContainer() {
+export function MessageContainer(props) {
   const [curr_latest, setCurrLatest] = useState(undefined);
   const [curr_last, setCurrLast] = useState(undefined);
   const [email, setEmail] = useState('');
@@ -27,6 +29,8 @@ export function MessageContainer() {
       }
     )
   }
+  //==
+  //
   function checkRequestAction(action) {
     switch(action){
       case '':
@@ -41,6 +45,7 @@ export function MessageContainer() {
   return (
     <div>
         <Panel requestHandler={__RequestHandler} />
+        <MessageLoadBalencer requestHandler={__RequestHandler} />
     </div>
   );
 }
