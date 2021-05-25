@@ -1,0 +1,46 @@
+# == Docs & Notes ==
+# -- to Replace ENV with Dockers Secrets
+# https://docs.docker.com/engine/swarm/secrets/ 
+
+# ==================
+
+version: '3.5'
+
+services:
+  api:
+    build: api
+    command: ["flask", "run", "--host=0.0.0.0"]
+    volumes:
+      - ./api:/backend
+    environment:
+      - FLASK_ENV=development
+      - FLASK_APP=app.py
+    links:
+      - mysql5_7
+    ports:
+      - "5000:5000"
+  client:
+    build: client
+    command: ["npm", "start"]
+    volumes:
+      - ./client:/frontend
+      - node-modules:/frontend/node_modules
+    environment:
+      - NODE_ENV=development
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api
+  mysql5_7:
+    image: mysql:5.7
+    restart: always
+    volumes:
+      - ./mysql5_7:/docker-entrypoint-initdb.d/:ro
+    environment:
+      MYSQL_DATABASE: localdb_57
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "32000:3306"
+volumes:
+  node-modules:
