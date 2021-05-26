@@ -37,10 +37,10 @@ def get_from_init(limit):
     try:
         if not limit:
             raise Exception("No limit")
-
+        #- connect
         connection = mysql.connector.connect(**config)
         cursor = connection.cursor(dictionary=True)
-
+        #- execute
         sql1 = "SELECT * FROM message ORDER BY message_id DESC LIMIT %s OFFSET 0"
         data1 = (limit,)
         cursor.execute(sql1, data1)
@@ -50,7 +50,7 @@ def get_from_init(limit):
             "result" : 'success',
             "value": convertToJson(results)
         }
-
+        #- close
         cursor.close()
         connection.close()
     except Exception as e:
@@ -101,15 +101,16 @@ def insert_message_info( email, name, comment):
             raise Exception("Name failed")
         elif len(comment) > 255:
             raise Exception("Comment failed")
-
+        #- connect
         connection = mysql.connector.connect(**config)
         cursor = connection.cursor(dictionary=True)
+        #- init
         sample_response = {}
         time_ms = str(time.time_ns())
         random_5chr_string = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
         _genMessageId = time_ms + random_5chr_string
         _genMessageInfoId = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-
+        #- execute
         sql1 = "insert into message(message_id) value(%s)"
         data1 = (_genMessageId,)
         cursor.execute(sql1, data1)
@@ -118,8 +119,8 @@ def insert_message_info( email, name, comment):
         data2 =  (_genMessageInfoId, _genMessageId, email, name, comment)
         cursor.execute(sql2, data2)
 
-        connection.commit()   # commit the changes
-
+        connection.commit()   #- commit the changes
+        #- close
         cursor.close()
         connection.close()
         sample_response = {

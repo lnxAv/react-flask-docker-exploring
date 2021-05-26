@@ -2,8 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { AxiosConfig, ErrorObject } from '../utils';
 import { MessageInfoItem } from '../MessageInfoItem/component';
 
-const FakeResult = {result: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,]}
-
 export function MessageLoadBalencer(props) {
   const [isReady, setIsReady] = useState(false)
   const [hasMore, sethasMore] = useState(true)
