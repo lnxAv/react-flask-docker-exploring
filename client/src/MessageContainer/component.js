@@ -2,17 +2,9 @@ import React, { useState } from 'react';
 import { Panel } from '../Panel/component';
 import { AxiosConfig, ErrorObject } from '../utils';
 import axios from 'axios'
-import { MessageInfoItem } from '../MessageInfoItem/component';
 import { MessageLoadBalencer } from '../MessageLoadBalencer/component';
 
 export function MessageContainer(props) {
-  const [curr_latest, setCurrLatest] = useState(undefined);
-  const [curr_last, setCurrLast] = useState(undefined);
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [comment, setComment] = useState('');
-  const [errorObject, setErrorObject]= useState()
-
   //! Api handler
   function __RequestHandler(axiosConfig = AxiosConfig(), action='', callback = ()=>{}){
     axios(axiosConfig)

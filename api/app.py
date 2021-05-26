@@ -22,10 +22,16 @@ config = {
 regex_email = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
 
 #! utils
+#^ is a rough and dirty way of getting a parsable JSON string
 def convertToJson(_value):
     return json.dumps(_value, indent=4, sort_keys=True, default=str)
 
 #! Database
+#^ The idea was to receive given comments information
+#^ Then Generate an ID (message_id) with time.time()+random_string --> (insert_message_info)
+#^ This method gives a sortable table that makes it easy to detect new message
+#^ It also gives an advantage with cursor based pagination (since OFFSET can become slow)
+
 # get ==
 def get_from_init(limit):
     try:
@@ -35,7 +41,7 @@ def get_from_init(limit):
         connection = mysql.connector.connect(**config)
         cursor = connection.cursor(dictionary=True)
 
-        sql1 = "SELECT * FROM message_info LIMIT %s OFFSET 0"
+        sql1 = "SELECT * FROM message ORDER BY message_id DESC LIMIT %s OFFSET 0"
         data1 = (limit,)
         cursor.execute(sql1, data1)
 
@@ -56,14 +62,16 @@ def get_from_init(limit):
 
 def get_from_top(curr_deep_first):
     try:
-        if not curr_deep_first:
-            curr_deep_first=''
-
         connection = mysql.connector.connect(**config)
         cursor = connection.cursor(dictionary=True)
 
-        sql1 = "SELECT message_info_id FROM message_info WHERE message_info_id < %s"
-        data1 = (curr_deep_first,)
+        if not curr_deep_first:
+            sql1 = "SELECT message_id FROM message WHERE message_id < %s ORDER BY message_id DESC"
+            data1 = (curr_deep_first,)
+        else:
+            sql1 = "SELECT message_id FROM message WHERE message_id"
+            data1 = ('',)
+
         cursor.execute(sql1, data1)
 
         results = cursor.fetchall()
@@ -80,6 +88,10 @@ def get_from_top(curr_deep_first):
             "error": str(e)
         }
     return sample_response
+#--> https://en.gravatar.com/site/implement/images/python/
+#x def get_gravatar(email):{
+#x 
+#x }
 # set ==
 def insert_message_info( email, name, comment):
     try:
